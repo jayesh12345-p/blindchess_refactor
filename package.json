@@ -1,0 +1,18 @@
+{
+  "dependencies": {
+    "socket.io": "^4.4.0"
+  },
+  "name": "blind-chess",
+  "version": "1.0.0",
+  "scripts": {
+    "dev:socket": "node scripts/socket-local.mjs",
+    "start": "node scripts/socket-local.mjs",
+    "start:socket": "node scripts/socket-local.mjs",
+    "test:socket": "node scripts/test-socket.mjs"
+  },
+  "main": "index.js",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": ""
+}
