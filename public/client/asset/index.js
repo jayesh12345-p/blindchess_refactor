@@ -91,12 +91,13 @@ board = Chessboard('myBoard', config)
 updateStatus()
 
 if (typeof io === 'function') {
-  // Local development uses port 3001. Set CHESS_SOCKET_URL in socket-config.js
-  // to use a separately hosted Socket.IO service in production.
+  // Add ?socket=local to the Vercel page to test it against a Socket.IO server
+  // running on this same computer. Ordinary visitors use the configured URL.
   var localSocketServer = ['localhost', '127.0.0.1'].includes(window.location.hostname)
+  var useLocalSocket = localSocketServer || new URLSearchParams(window.location.search).get('socket') === 'local'
   var configuredSocketUrl = (window.CHESS_SOCKET_URL || '').trim().replace(/\/+$/, '')
-  var dedicatedSocketServer = localSocketServer || Boolean(configuredSocketUrl)
-  var socketUrl = configuredSocketUrl || (localSocketServer ? 'http://localhost:3001' : window.location.origin)
+  var dedicatedSocketServer = useLocalSocket || Boolean(configuredSocketUrl)
+  var socketUrl = useLocalSocket ? 'http://localhost:3001' : (configuredSocketUrl || window.location.origin)
   socket = io(socketUrl, {
     path: dedicatedSocketServer ? '/socket.io' : '/api/socket/socket.io',
     transports: ['websocket']

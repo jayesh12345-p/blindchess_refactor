@@ -6,7 +6,7 @@ A browser based blind chess game built with Chessboard.js, chess.js, Node.js, an
 
 - Node.js 22 or later
 - npm
-- Vercel CLI (can be run with `npx`)
+- Python 3 (for the built-in static file server)
 
 Install the project dependencies from the project root:
 
@@ -16,7 +16,7 @@ npm.cmd install
 
 ## Run locally
 
-The page and Socket.IO server run in separate terminal windows. Start both from the project root.
+The page and Socket.IO server run in separate terminal windows. Start both from the project root. You do not need the Vercel CLI for this local setup.
 
 **Terminal 1 — start Socket.IO on port 3001:**
 
@@ -26,13 +26,19 @@ npm.cmd run dev:socket
 
 Wait for `Socket.IO server listening at http://localhost:3001` and leave this terminal running.
 
-**Terminal 2 — start the page on port 3000:**
+**Terminal 2 — serve the page on port 3000:**
 
 ```powershell
-npx.cmd vercel dev --listen 3000
+py -m http.server 3000 --directory public
 ```
 
-Open <http://localhost:3000> in two browser tabs. The first player should see a waiting message. When the second player joins, the game starts; White moves first. Try alternating moves between the two tabs.
+If `py` is not recognized, try:
+
+```powershell
+python -m http.server 3000 --directory public
+```
+
+This Python command serves the static files in `public`; the Node.js process in Terminal 1 handles Socket.IO connections and game events. Leave both terminals running. Open <http://localhost:3000> in two browser tabs. The first player should see a waiting message. When the second player joins, the game starts; White moves first. Try alternating moves between the two tabs.
 
 Stop either server with **Ctrl+C** in its terminal.
 
@@ -88,6 +94,7 @@ This test covers the Socket.IO server flow. It does not test the browser UI, che
 ## Troubleshooting
 
 - If `npm` is blocked by PowerShell's script policy, use `npm.cmd` as shown above.
+- If Python is not installed or `py`/`python` is not recognized, install Python 3 or use `npx.cmd vercel dev --listen 3000` to serve the page instead.
 - If port 3000 or 3001 is already in use, stop the process using it. The local browser client expects Socket.IO on port 3001.
 - If the page says it cannot connect, check that the Socket.IO terminal is still running and that the browser is open at `http://localhost:3000`.
 
